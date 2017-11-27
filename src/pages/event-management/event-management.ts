@@ -29,6 +29,7 @@ export class EventManagementPage {
   public faculties = [];
 
   public rawListOfEvents;
+  public listOfMyEvents;
 
   constructor(
     public navCtrl: NavController,
@@ -43,23 +44,43 @@ export class EventManagementPage {
     this.getListOfEvents();
   }
 
-  doRefresh(refresher) {
-    this.restApiProvider.getEvents(Number(this.eventState))
-    .then(result => {
-      this.rawListOfEvents = result;
-      this.faculties = Object.keys(this.groupByFaculty(result));
-      this.events = this.groupByFaculty(result);
-      refresher.complete();
-    })
-    .catch(error =>{
-      console.log("ERROR API : getEvents",error);
-      refresher.complete();
-    })
+  doRefresh(refresher){
+    if(this.eventState == "1"){
+      this.restApiProvider.getUpEvents()
+      .then(result => {
+        this.rawListOfEvents = result;
+        this.faculties = Object.keys(this.groupByFaculty(result));
+        this.events = this.groupByFaculty(result);
+        refresher.complete();
+      })
+      .catch(error =>{
+        console.log("ERROR API : getUpEvents",error);
+        refresher.complete();
+      })
+    }else if(this.eventState == "0"){
+      this.restApiProvider.getMyEvents()
+      .then(result => {
+        this.listOfMyEvents = result;
+        refresher.complete();
+      })
+      .catch(error =>{
+        console.log("ERROR API : getMyEvents",error);
+        refresher.complete();
+      })
+    }
   }
 
   getListOfEvents(){
+    if(this.eventState == "1"){
+      this.getUpComingEvents();
+    }else if(this.eventState == "0"){
+      this.getMyEvents();
+    }
+  }
+
+  getUpComingEvents(){
     this.presentLoading();
-    this.restApiProvider.getEvents(Number(this.eventState))
+    this.restApiProvider.getUpEvents()
     .then(result => {
       this.loader.dismiss();
       this.rawListOfEvents = result;
@@ -68,7 +89,20 @@ export class EventManagementPage {
     })
     .catch(error =>{
       this.loader.dismiss();
-      console.log("ERROR API : getEvents",error);
+      console.log("ERROR API : getUpEvents",error);
+    })
+  }
+
+  getMyEvents(){
+    this.presentLoading();
+    this.restApiProvider.getMyEvents()
+    .then(result => {
+      this.loader.dismiss();
+      this.listOfMyEvents = result;
+    })
+    .catch(error =>{
+      this.loader.dismiss();
+      console.log("ERROR API : getMyEvents",error);
     })
   }
 
@@ -87,11 +121,23 @@ export class EventManagementPage {
     }, {});
   }
 
-  eventDetails(eid: number){
-    console.log("viewEvent",eid);
-    let event: Event = this.rawListOfEvents.find(i => i.EID === eid);
+  eventDetails(tid: number){
+    console.log("eventDetails",tid);
+    let event: Event;
+    if(this.eventState == "1"){
+      event = this.rawListOfEvents.find(i => i.TID === tid);
+      this.navCtrl.push(ViewEventPage, {event: event, "parentPage": this});
+    }else if(this.eventState == "0"){
+      event = this.listOfMyEvents.find(i => i.TID === tid);
+      this.navCtrl.push(ViewEventPage, {event: event, "parentPage": this});
+    }
     
-    this.navCtrl.push(ViewEventPage, {event: event, "parentPage": this});
+  }
+
+  getDate(date: string){
+    let d = new Date(date).toString().split(" ");
+    let t = d[4].split(":");
+    return d[2]+" "+d[1]+" "+t[0]+":"+t[1];
   }
 
   presentAlert(message) {

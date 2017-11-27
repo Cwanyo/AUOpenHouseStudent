@@ -14,8 +14,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class RestApiProvider {
 
-  //public url = 'https://auopenhouse.herokuapp.com/api/student';
-  public url = 'http://localhost:3000/api/student';
+  public url = 'https://auopenhouse.herokuapp.com/api/student';
+  //public url = 'http://localhost:3000/api/student';
 
   constructor(public http: HttpClient) {
     console.log('Hello RestApiProvider Provider');
@@ -73,8 +73,73 @@ export class RestApiProvider {
     });
   }
 
+  getUpEvents(){
+    let path = this.url+'/upevents';
+    
+    return new Promise((resolve, reject) => {
+      this.http.get(path, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+  
+  getMyEvents(){
+    let path = this.url+'/myevents';
+    
+    return new Promise((resolve, reject) => {
+      this.http.get(path, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  joinEvent(tid: number){
+    let path = this.url+'/myevents/'+tid;
+    
+    return new Promise((resolve, reject) => {
+      this.http.post(path, null, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  leaveEvent(tid: number){
+    let path = this.url+'/myevents/'+tid;
+    
+    return new Promise((resolve, reject) => {
+      this.http.delete(path, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  checkMyEventAttend(tid: number){
+    let path = this.url+'/myevents/'+tid;
+    
+    return new Promise((resolve, reject) => {
+      this.http.get(path, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
   getEvents(state: number){
-    let path = this.url+'/events/'+state;
+    let path = this.url+'/upevents/'+state;
     
     return new Promise((resolve, reject) => {
       this.http.get(path, {withCredentials: true})

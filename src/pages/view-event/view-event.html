@@ -27,7 +27,7 @@
         </ion-item>
         <ion-item>
             <ion-label floating>Info</ion-label>
-            <ion-textarea formControlName="Info"></ion-textarea>
+            <ion-textarea autosize formControlName="Info"></ion-textarea>
         </ion-item>
         <ion-item>
             <ion-label floating>Faculty</ion-label>
@@ -43,50 +43,32 @@
                 <ion-option *ngFor="let m of listMajors" value="{{m.MID}}">{{m.Name}}</ion-option>
             </ion-select>
         </ion-item>
-        <ion-item>
-            <ion-label floating>State</ion-label>
-            <ion-select formControlName="State">
-                <ion-option value="1">Enable</ion-option>
-                <ion-option value="0">Disable</ion-option>
-            </ion-select>
-        </ion-item>
 
         <div style="text-align: center;padding: 10px;height:250px;width:100%">
             <div #map id="map"></div>
         </div>
 
-        <div formArrayName="Event_Time">
+        <ion-card>
+            <ion-card-header text-center>Event Time</ion-card-header>
 
-            <div *ngFor="let eventTime of eventForm.controls.Event_Time.controls; let i=index">
+            <ion-card-content>
+                <ion-item>
+                    <ion-label>Start</ion-label>
+                    <ion-datetime formControlName="Time_Start" displayFormat="YYYY-MM-DD HH:mm" min={{minSelectabledate}} max={{maxSelectabledate}}></ion-datetime>
+                </ion-item>
+                <ion-item *ngIf="eventForm.get('Time_Start').value">
+                    <ion-label>End</ion-label>
+                    <ion-datetime formControlName="Time_End" displayFormat="YYYY-MM-DD HH:mm" min="{{eventForm.get('Time_Start').value}}" max={{maxSelectabledate}}></ion-datetime>
+                </ion-item>
+                <button *ngIf="checkAttend==false" ion-button full (click)="joinEvent()">
+                    Join Event
+                </button>
+                <button *ngIf="checkAttend==true" color="danger" ion-button full (click)="leaveEvent()">
+                    Leave Event
+                </button>
 
-                <ion-card>
-                    <ion-card-header text-center>Event Time {{i + 1}}</ion-card-header>
-
-                    <ion-card-content [formGroupName]="i">
-                        <ion-item>
-                            <ion-label>Start</ion-label>
-                            <ion-datetime formControlName="Time_Start" displayFormat="YYYY-MM-DD HH:mm" min={{minSelectabledate}} max={{maxSelectabledate}}></ion-datetime>
-                        </ion-item>
-                        <ion-item *ngIf="eventForm.get('Event_Time').value[i].Time_Start">
-                            <ion-label>End</ion-label>
-                            <ion-datetime formControlName="Time_End" displayFormat="YYYY-MM-DD HH:mm" min="{{eventForm.get('Event_Time').value[i].Time_Start}}" max={{maxSelectabledate}}></ion-datetime>
-                        </ion-item>
-
-                        <div *ngIf="listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID]">
-                            <button *ngIf="listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID].length > 0" ion-button full color="secondary" (click)="viewAttendees(eventForm.get('Event_Time').value[i].TID)">
-                                <ion-icon name="people"></ion-icon>&nbsp;&nbsp;Attendees : {{listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID].length}}
-                            </button>
-                            <button *ngIf="listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID].length <= 0" ion-button full color="danger">
-                                <ion-icon name="people"></ion-icon>&nbsp;&nbsp;Attendees : {{listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID].length}}
-                            </button>
-                        </div>
-
-                    </ion-card-content>
-                </ion-card>
-
-            </div>
-
-        </div>
+            </ion-card-content>
+        </ion-card>
 
     </form>
 
