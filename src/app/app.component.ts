@@ -10,7 +10,10 @@ import { LoginPage } from './../pages/login/login';
 
 import { HomePage } from '../pages/home/home';
 
+import { BulletinPage } from '../pages/bulletin/bulletin';
+
 import { EventManagementPage } from './../pages/event-management/event-management';
+
 import { GameManagementPage } from './../pages/game-management/game-management';
 
 import { RestApiProvider } from '../providers/rest-api/rest-api';
@@ -38,7 +41,6 @@ export class MyApp {
   ) {
     this.initializeApp();
     this.userAuth();
-    this.checkUserRole();
   }
 
   userAuth(){
@@ -48,17 +50,6 @@ export class MyApp {
         return;
       }
       this.user = user;
-    });
-  }
-
-  checkUserRole() {
-    console.log("checkUserRole");
-    Observable.interval(1000).subscribe(() => {
-      if(!sessionStorage.getItem('userRole')){
-        this.userRole = "NONE";
-        return;
-      }
-      this.userRole = sessionStorage.getItem('userRole').toUpperCase();
     });
   }
 
@@ -75,15 +66,19 @@ export class MyApp {
     if (!params) params = {};
     this.navCtrl.setRoot(HomePage);
   }
-  goToEventManagement(params){
+  goToBulletin(params){
+    if (!params) params = {};
+    this.navCtrl.setRoot(BulletinPage);
+  }
+  goToEvent(params){
     if (!params) params = {};
     this.navCtrl.setRoot(EventManagementPage);
   }
-  goToGameManagement(params){
+  goToGame(params){
     if (!params) params = {};
     this.navCtrl.setRoot(GameManagementPage);
   }
-  
+
   logout() {
     this.afAuth.auth.signOut()
     .then(result => console.log("Sign-out",result))
