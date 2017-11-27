@@ -3,16 +3,12 @@ export interface Event {
     Name: string;
     Info: string;
     Image: string;
-    State: string;
     Location_Latitude: string;
     Location_Longitude: string;
-    Event_Time: EventTime[];
+    TID: string;
+    Time_Start: string;
+    Time_End: string;
     MID: string;
     FID: string;
 }
 
-export interface EventTime {
-    TID: string;
-    Time_Start: string;
-    Time_End: string;
-}

@@ -12,6 +12,8 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
+import { Autosize} from '../components/autosize/autosize';
+
 import { LoginPage } from './../pages/login/login';
 
 import { HomePage } from '../pages/home/home';
@@ -49,6 +51,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ViewEventPage,
     GameManagementPage,
     ViewGamePage,
+    Autosize
   ],
   imports: [
     BrowserModule,

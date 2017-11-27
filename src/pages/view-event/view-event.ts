@@ -111,46 +111,25 @@ export class ViewEventPage {
     //--
     this.eventForm = this.formBuilder.group({
       EID: this.event.EID.toString(),
-      Name: [this.event.Name.toString(), [Validators.required]],
-      Info: [this.event.Info.toString(), [Validators.required]],
+      Name: this.event.Name.toString(),
+      Info: this.event.Info.toString(),
       Image: this.event.Image.toString(),
-      State: [this.event.State.toString(), [Validators.required]],
       Location_Latitude: this.event.Location_Latitude.toString(),
       Location_Longitude: this.event.Location_Longitude.toString(),
-      Event_Time: this.formBuilder.array([]),
-      MID: [this.event.MID.toString(), [Validators.required]],
-      FID: [this.event.FID.toString(), [Validators.required]]
+      TID: this.event.TID.toString(),
+      Time_Start: this.convertTime(this.event.Time_Start),
+      Time_End: this.convertTime(this.event.Time_End),
+      MID: this.event.MID.toString(),
+      FID: this.event.FID.toString()
     });
     //set major 
     this.hintMajors(Number(this.event.FID));
     this.eventForm.patchValue({MID: this.event.MID.toString()});
-    //set event time
-    this.initEventTime();
   }
 
   convertTime(time: string){
     let temp = time.split(" ");
     return temp[0]+"T"+temp[1]+".000Z"
-  }
-
-  initEventTime(){
-    this.restApiProvider.getEventTime(Number(this.event.EID))
-    .then(result => {
-      let json: any = result;
-      const control = <FormArray>this.eventForm.controls["Event_Time"];
-      json.forEach(t => {
-        control.push(this.formBuilder.group({
-          TID: t.TID,
-          Time_Start: [this.convertTime(t.Time_Start), [Validators.required]],
-          Time_End: [this.convertTime(t.Time_End), [Validators.required]]
-        }));
-        this.getNumberOfEventTimeAttendess(t.TID);
-        control.disable();
-      });
-    })
-    .catch(error =>{
-      console.log("ERROR API : getEventTime",error);
-    })
   }
 
   getNumberOfEventTimeAttendess(tid: number){
@@ -190,6 +169,47 @@ export class ViewEventPage {
     .catch(error =>{
       console.log("ERROR API : getMajorsInFaculty",error);
     })
+  }
+
+  joinEvent(){
+    console.log("joinEvent",this.event.TID);
+    let confirm = this.alertCtrl.create({
+      title: "Alert!",
+      message: "Are you sure that you want to join this event time?",
+      enableBackdropDismiss: false,
+      buttons: [{
+        text: "Disagree"
+      },{
+        text: "Agree",
+        handler: () => {
+          //TODO - delete the game (use api)
+          console.log('Agree clicked');
+          this.presentLoading();
+          this.restApiProvider.joinEvent(Number(this.event.TID))
+          .then(result => {
+            console.log("join event time success");
+            this.loader.dismiss();
+            var jsonData: any = result;
+            if(jsonData.isSuccess){
+              this.presentAlert(jsonData.message);
+            }
+          })
+          .catch(error =>{
+            this.loader.dismiss();
+            console.log("ERROR API : joinEvent",error);
+            if(error.status == 0){
+              //show error message
+              this.presentAlert("Cannot connect to server");
+            }else{
+              var jsonData = JSON.parse(error.error);
+              //show error message
+              this.presentAlert(jsonData.message);
+            }
+          });
+        }
+      }]
+    });
+    confirm.present();
   }
 
   presentAlert(message) {

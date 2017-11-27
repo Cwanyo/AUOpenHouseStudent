@@ -27,7 +27,7 @@
         </ion-item>
         <ion-item>
             <ion-label floating>Info</ion-label>
-            <ion-textarea formControlName="Info"></ion-textarea>
+            <ion-textarea autosize formControlName="Info"></ion-textarea>
         </ion-item>
         <ion-item>
             <ion-label floating>Faculty</ion-label>
@@ -79,7 +79,7 @@
                     <ion-card-content [formGroupName]="i">
                         <ion-item>
                             <ion-label stacked>Question</ion-label>
-                            <ion-textarea formControlName="Question"></ion-textarea>
+                            <ion-textarea autosize formControlName="Question"></ion-textarea>
                         </ion-item>
 
                         <ion-label text-center>Choices</ion-label>
@@ -89,7 +89,7 @@
 
                                     <ion-item>
                                         <ion-label>{{j + 1}}</ion-label>
-                                        <ion-textarea formControlName="Choice"></ion-textarea>
+                                        <ion-textarea autosize formControlName="Choice"></ion-textarea>
                                     </ion-item>
 
                                 </div>
