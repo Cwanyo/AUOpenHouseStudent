@@ -2,28 +2,28 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, LoadingController } from 'ionic-angular'
 import { Loading } from 'ionic-angular/components/loading/loading';
 
-import { ViewFacultyPage } from '../view-faculty/view-faculty';
-
-import { Faculty } from './../../interface/faculty';
+import { Faculty } from '../../interface/faculty';
 
 import { RestApiProvider } from './../../providers/rest-api/rest-api';
 
 /**
- * Generated class for the BulletinPage page.
+ * Generated class for the ViewFacultyPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
 
 @Component({
-  selector: 'page-bulletin',
-  templateUrl: 'bulletin.html',
+  selector: 'page-view-faculty',
+  templateUrl: 'view-faculty.html',
 })
-export class BulletinPage {
+export class ViewFacultyPage {
 
   private loader: Loading;
 
-  private listOfFaculties;
+  private faculty: Faculty;
+  
+  private listOfMajors;
 
   constructor(
     public navCtrl: NavController,
@@ -34,30 +34,26 @@ export class BulletinPage {
   }
 
   ngOnInit(){
-    this.getListOfFaculties();
+    this.faculty = this.navParams.get("faculty");
+    console.log("Faculty", this.faculty);
+
+    this.getListOfMajors();
   }
 
-  getListOfFaculties(){
+  getListOfMajors(){
     this.presentLoading();
-    this.restApiProvider.getFaculties()
+    this.restApiProvider.getMajorsInFaculty(Number(this.faculty.FID))
     .then(result => {
       this.loader.dismiss();
-      this.listOfFaculties = result;
+      this.listOfMajors = result;
     })
     .catch(error =>{
       this.loader.dismiss();
-      console.log("ERROR API : getFaculties",error);
+      console.log("ERROR API : getMajorsInFaculty",error);
     })
   }
 
-  facultyDetails(fid: number){
-    console.log("facultyDetails", fid);
-    let faculty: Faculty = this.listOfFaculties.find(i => i.FID == fid);
-
-    this.navCtrl.push(ViewFacultyPage, {faculty: faculty});
-  }
-
-    presentLoading() {
+  presentLoading() {
     this.loader = this.loadingCtrl.create({
       content: "Please wait..."
     });

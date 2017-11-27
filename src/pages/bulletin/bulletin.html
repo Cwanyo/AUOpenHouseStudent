@@ -18,4 +18,22 @@
 
 <ion-content padding>
 
+    <ion-list>
+
+        <ion-item-group>
+            <ion-item-divider text-wrap color="light" style="font-weight: bold">
+                <ion-label>Undergraduate Programs</ion-label>
+            </ion-item-divider>
+
+            <ion-item *ngFor="let faculty of listOfFaculties" (click)="facultyDetails(faculty.FID)">
+                <ion-thumbnail item-start>
+                    <img *ngIf="!faculty.Icon" src="assets/img/event.png" />
+                    <img *ngIf="faculty.Icon" src={{faculty.Icon}} />
+                </ion-thumbnail>
+                <h2 text-wrap text-capitalize>{{faculty.Name}}</h2>
+            </ion-item>
+        </ion-item-group>
+
+    </ion-list>
+
 </ion-content>
