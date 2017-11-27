@@ -7,8 +7,6 @@ import * as firebase from 'firebase/app';
 
 import { HomePage } from './../home/home';
 
-import { RequestAccountPage } from '../request-account/request-account';
-
 import { RestApiProvider } from './../../providers/rest-api/rest-api';
 import { Subscription } from 'rxjs/Subscription';
 /**
@@ -78,8 +76,6 @@ export class LoginPage {
           this.loader.dismiss();
           //if account verify then Re-direct to Home
           this.menu.enable(true);
-          //set session
-          sessionStorage.setItem("userRole", jsonData.role);
           this.navCtrl.setRoot(HomePage);
         }
       }).catch(error => {
@@ -123,13 +119,6 @@ export class LoginPage {
       dismissOnPageChange: true
     });
     this.loader.present();
-  }
-
-  requestAccount(params){
-    if (!params) params = {};
-    console.log("requestAccount")
-    this.subAuth.unsubscribe();
-    this.navCtrl.push(RequestAccountPage, {"parentPage": this});
   }
 
   login(provider){

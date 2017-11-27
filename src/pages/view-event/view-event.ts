@@ -1,4 +1,3 @@
-import { ViewAttendeesPage } from './../view-attendees/view-attendees';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Loading } from 'ionic-angular/components/loading/loading';
@@ -6,10 +5,8 @@ import { Loading } from 'ionic-angular/components/loading/loading';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { Event } from './../../interface/event';
 
-import { EditEventPage } from './../edit-event/edit-event';
-
 import { RestApiProvider } from './../../providers/rest-api/rest-api';
-
+import {} from '@types/googlemaps';
 /**
  * Generated class for the ViewEventPage page.
  *
@@ -170,13 +167,6 @@ export class ViewEventPage {
     });
   }
 
-  viewAttendees(tid: number){
-    console.log("viewAttendees", tid);
-    let attendees = this.listEventTimeAttendess[tid];
-
-    this.navCtrl.push(ViewAttendeesPage, {attendees: attendees})
-  }
-
   getListOfFaculties(){
     this.restApiProvider.getFaculties()
     .then(result => {
@@ -200,13 +190,6 @@ export class ViewEventPage {
     .catch(error =>{
       console.log("ERROR API : getMajorsInFaculty",error);
     })
-  }
-
-  eventEdit(){
-    console.log("editEvent");
-    let event = this.event;
-    
-    this.navCtrl.push(EditEventPage, {event: event, "parentPage":  this.navParams.get("parentPage")});
   }
 
   presentAlert(message) {

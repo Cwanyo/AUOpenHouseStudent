@@ -6,15 +6,12 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
-//Pages for staff and admin
 import { LoginPage } from './../pages/login/login';
+
 import { HomePage } from '../pages/home/home';
+
 import { EventManagementPage } from './../pages/event-management/event-management';
 import { GameManagementPage } from './../pages/game-management/game-management';
-
-//Pages for admin only
-import { AdminAccountManagementPage } from '../pages/admin-account-management/admin-account-management';
-import { AdminAccountApprovalPage } from '../pages/admin-account-approval/admin-account-approval';
 
 import { RestApiProvider } from '../providers/rest-api/rest-api';
 
@@ -85,14 +82,6 @@ export class MyApp {
   goToGameManagement(params){
     if (!params) params = {};
     this.navCtrl.setRoot(GameManagementPage);
-  }
-  goToAccountManagement(params){
-    if (!params) params = {};
-    this.navCtrl.setRoot(AdminAccountManagementPage);
-  }
-  goToAdminAccountApproval(params){
-    if (!params) params = {};
-    this.navCtrl.setRoot(AdminAccountApprovalPage);
   }
   
   logout() {

@@ -16,7 +16,7 @@ page-login {
         background-color: #737373;
         color: white;
     }
-    .button-request {
+    .button-facebook {
         background-color: #3255ff;
         margin-top: 5%;
         margin-left: 5%;
@@ -28,5 +28,9 @@ page-login {
         font-weight: bold;
         font-family: Arial, Helvetica, sans-serif;
         position: center;
+    }
+    .button-facebook:hover {
+        background-color: #737373;
+        color: white;
     }
 }

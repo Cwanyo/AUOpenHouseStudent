@@ -6,7 +6,6 @@
             <a style="display:block;">
                 <img src="{{user.photoURL}}" style="display:block;width:50%;height:auto;margin-left:auto;margin-right:auto;" />
             </a>
-            <h2 id="menu-user-role">| {{userRole}} |</h2>
             <h2 id="menu-user-name">
                 {{user.displayName}}
             </h2>
@@ -14,35 +13,24 @@
 
         <div class="spacer"></div>
 
-        <div *ngIf="userRole == 'STAFF' || userRole == 'ADMIN'">
-            <ion-list>
-                <ion-item color="none" menuClose="" on-click="goToHome()" class="side-menu-item">
-                    <ion-icon name="home" item-left></ion-icon>
-                    HOME
-                </ion-item>
-                <ion-item color="none" menuClose="" on-click="goToEventManagement()" class="side-menu-item">
-                    <ion-icon name="clipboard" item-left></ion-icon>
-                    Event Management
-                </ion-item>
-                <ion-item color="none" menuClose="" on-click="goToGameManagement()" class="side-menu-item">
-                    <ion-icon name="game-controller-b" item-left></ion-icon>
-                    Game Management
-                </ion-item>
-            </ion-list>
-        </div>
-
-        <div *ngIf="userRole == 'ADMIN'">
-            <ion-list>
-                <ion-item color="none" menuClose="" on-click="goToAccountManagement()" class="side-menu-item">
-                    <ion-icon name="people" item-left></ion-icon>
-                    Account Management
-                </ion-item>
-                <ion-item color="none" menuClose="" on-click="goToAdminAccountApproval()" class="side-menu-item">
-                    <ion-icon name="person-add" item-left></ion-icon>
-                    Account Approval
-                </ion-item>
-            </ion-list>
-        </div>
+        <ion-list>
+            <ion-item color="none" menuClose="" on-click="goToHome()" class="side-menu-item">
+                <ion-icon name="home" item-left></ion-icon>
+                HOME
+            </ion-item>
+            <ion-item color="none" menuClose="" on-click="goToBulletin()" class="side-menu-item">
+                <ion-icon name="home" item-left></ion-icon>
+                Bulletin
+            </ion-item>
+            <ion-item color="none" menuClose="" on-click="goToEvent()" class="side-menu-item">
+                <ion-icon name="clipboard" item-left></ion-icon>
+                Event
+            </ion-item>
+            <ion-item color="none" menuClose="" on-click="goToGame()" class="side-menu-item">
+                <ion-icon name="game-controller-b" item-left></ion-icon>
+                Game
+            </ion-item>
+        </ion-list>
 
         <ion-item color="none" menuClose="" on-click="logout()" class="side-menu-item">
             <ion-icon name="log-out" item-left></ion-icon>

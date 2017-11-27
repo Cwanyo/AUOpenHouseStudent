@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular'
 import { Loading } from 'ionic-angular/components/loading/loading';
 
-import { CreateEventPage } from './../create-event/create-event';
-import { EditEventPage } from './../edit-event/edit-event';
 import { ViewEventPage } from './../view-event/view-event';
 
 import { Event } from './../../interface/event';
@@ -89,66 +87,11 @@ export class EventManagementPage {
     }, {});
   }
 
-  createEvent(param){
-    if (!param) param = {};
-    console.log("createEvent")
-    this.navCtrl.push(CreateEventPage, {"parentPage": this});
-  }
-
   eventDetails(eid: number){
     console.log("viewEvent",eid);
     let event: Event = this.rawListOfEvents.find(i => i.EID === eid);
     
     this.navCtrl.push(ViewEventPage, {event: event, "parentPage": this});
-  }
-
-  eventEdit(eid: number){
-    console.log("editEvent",eid);
-    let event: Event = this.rawListOfEvents.find(i => i.EID === eid);
-    
-    this.navCtrl.push(EditEventPage, {event: event, "parentPage": this});
-  }
-
-  eventDelete(eid: number){
-    console.log("deleteEvent:",eid);
-    let confirm = this.alertCtrl.create({
-      title: "Alert!",
-      message: "Are you sure that you want to delete this event?",
-      enableBackdropDismiss: false,
-      buttons: [{
-        text: "Disagree"
-      },{
-        text: "Agree",
-        handler: () => {
-          //TODO - delete the event (use api)
-          console.log('Agree clicked');
-          this.presentLoading();
-          this.restApiProvider.deleteEvent(eid)
-          .then(result => {
-            console.log("delete event success");
-            this.loader.dismiss();
-            this.getListOfEvents();
-            var jsonData: any = result;
-            if(jsonData.isSuccess){
-              this.presentAlert(jsonData.message);
-            }
-          })
-          .catch(error =>{
-            this.loader.dismiss();
-            console.log("ERROR API : deleteEvent",error);
-            if(error.status == 0){
-              //show error message
-              this.presentAlert("Cannot connect to server");
-            }else{
-              var jsonData = JSON.parse(error.error);
-              //show error message
-              this.presentAlert(jsonData.message);
-            }
-          });
-        }
-      }]
-    });
-    confirm.present();
   }
 
   presentAlert(message) {

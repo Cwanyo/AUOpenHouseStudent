@@ -5,10 +5,8 @@ import { Loading } from 'ionic-angular/components/loading/loading';
 import { Validators, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { Game } from './../../interface/Game';
 
-import { EditGamePage } from './../edit-game/edit-game';
-
 import { RestApiProvider } from './../../providers/rest-api/rest-api';
-
+import {} from '@types/googlemaps';
 /**
  * Generated class for the ViewGamePage page.
  *
@@ -217,13 +215,6 @@ export class ViewGamePage {
     .catch(error =>{
       console.log("ERROR API : getMajorsInFaculty",error);
     })
-  }
-
-  gameEdit(){
-    console.log("editGame");
-    let game = this.game;
-    
-    this.navCtrl.push(EditGamePage, {game: game, "parentPage":  this.navParams.get("parentPage")});
   }
 
   presentAlert(message) {
