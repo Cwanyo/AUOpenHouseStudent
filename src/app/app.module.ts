@@ -16,7 +16,9 @@ import { LoginPage } from './../pages/login/login';
 
 import { HomePage } from '../pages/home/home';
 
+//Bulletin Page
 import { BulletinPage } from './../pages/bulletin/bulletin';
+import { ViewFacultyPage } from './../pages/view-faculty/view-faculty';
 
 //Event Pages
 import { EventManagementPage } from './../pages/event-management/event-management';
@@ -42,6 +44,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     LoginPage,
     HomePage,
     BulletinPage,
+    ViewFacultyPage,
     EventManagementPage,
     ViewEventPage,
     GameManagementPage,
@@ -63,6 +66,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     LoginPage,
     HomePage,
     BulletinPage,
+    ViewFacultyPage,
     EventManagementPage,
     ViewEventPage,
     GameManagementPage,
