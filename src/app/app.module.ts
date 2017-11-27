@@ -12,7 +12,6 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
-//--Pages for staff and admin--
 import { LoginPage } from './../pages/login/login';
 
 import { HomePage } from '../pages/home/home';

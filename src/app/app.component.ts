@@ -18,8 +18,6 @@ import { GameManagementPage } from './../pages/game-management/game-management';
 
 import { RestApiProvider } from '../providers/rest-api/rest-api';
 
-import {Observable} from 'rxjs/Rx';
-
 @Component({
   templateUrl: 'app.html'
 })
@@ -29,7 +27,6 @@ export class MyApp {
   rootPage: any = LoginPage;
 
   private user: firebase.User;
-  private userRole: string;
 
   constructor(
     public platform: Platform, 
