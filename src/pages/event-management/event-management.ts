@@ -46,30 +46,26 @@ export class EventManagementPage {
 
   doRefresh(refresher){
     if(this.eventState == "1"){
-      this.presentLoading();
       this.restApiProvider.getUpEvents()
       .then(result => {
-        this.loader.dismiss();
         this.rawListOfEvents = result;
         this.faculties = Object.keys(this.groupByFaculty(result));
         this.events = this.groupByFaculty(result);
         refresher.complete();
       })
       .catch(error =>{
-        this.loader.dismiss();
         console.log("ERROR API : getUpEvents",error);
         refresher.complete();
       })
     }else if(this.eventState == "0"){
-      this.presentLoading();
       this.restApiProvider.getMyEvents()
       .then(result => {
-        this.loader.dismiss();
         this.listOfMyEvents = result;
+        refresher.complete();
       })
       .catch(error =>{
-        this.loader.dismiss();
         console.log("ERROR API : getMyEvents",error);
+        refresher.complete();
       })
     }
   }
@@ -130,11 +126,12 @@ export class EventManagementPage {
     let event: Event;
     if(this.eventState == "1"){
       event = this.rawListOfEvents.find(i => i.TID === tid);
+      this.navCtrl.push(ViewEventPage, {event: event, "parentPage": this});
     }else if(this.eventState == "0"){
       event = this.listOfMyEvents.find(i => i.TID === tid);
+      this.navCtrl.push(ViewEventPage, {event: event, "parentPage": this});
     }
     
-    this.navCtrl.push(ViewEventPage, {event: event, "parentPage": this});
   }
 
   getDate(date: string){

@@ -16,10 +16,10 @@
     <ion-toolbar>
         <ion-segment [(ngModel)]="eventState" (ionChange)="getListOfEvents()">
             <ion-segment-button value="1">
-                All Events
+                Upcoming
             </ion-segment-button>
             <ion-segment-button value="0">
-                My Events
+                Joined
             </ion-segment-button>
         </ion-segment>
     </ion-toolbar>
@@ -52,6 +52,7 @@
                         </ion-thumbnail>
                         <h2>{{event.Name}}</h2>
                         <p>{{event.Info}}</p>
+                        <p>Start - {{getDate(event.Time_Start)}}</p>
                     </ion-item>
                 </ion-item-sliding>
 

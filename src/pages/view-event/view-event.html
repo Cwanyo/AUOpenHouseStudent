@@ -60,8 +60,11 @@
                     <ion-label>End</ion-label>
                     <ion-datetime formControlName="Time_End" displayFormat="YYYY-MM-DD HH:mm" min="{{eventForm.get('Time_Start').value}}" max={{maxSelectabledate}}></ion-datetime>
                 </ion-item>
-                <button ion-button full (click)="joinEvent()">
-                    Join
+                <button *ngIf="checkAttend==false" ion-button full (click)="joinEvent()">
+                    Join Event
+                </button>
+                <button *ngIf="checkAttend==true" color="danger" ion-button full (click)="leaveEvent()">
+                    Leave Event
                 </button>
 
             </ion-card-content>
