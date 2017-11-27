@@ -1,0 +1,89 @@
+// http://ionicframework.com/docs/v2/theming/
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+$SIDEMENU_TOP: #e66767; //#e66767;
+$SIDEMENU_BOTTOM: #5687d6; //#5687d6;
+$SIDEMENU_TRANSPARENCY: rgba(255, 255, 255, 0.4);
+#menu-user-profile-pic {
+    display: block;
+    width: 50%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    //
+    border-radius: 60%;
+    /*margin: 10px;
+    border: 2px solid $SIDEMENU_TRANSPARENCY;
+    -webkit-box-shadow: 0px 0px 142px -37px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 142px -37px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 142px -37px rgba(0, 0, 0, 0.75);*/
+}
+
+.spacer {
+    height: 25px;
+}
+
+#menu-user-role {
+    font-size: 20px;
+    color: #FFFFFF;
+    font-weight: 300;
+    text-align: center;
+}
+
+#menu-user-name {
+    font-size: 20px;
+    color: #FFFFFF;
+    font-weight: 300;
+    text-align: center;
+}
+
+.side-menu-item {
+    background: none;
+    color: white;
+    font-weight: 300;
+    border: 0px;
+    .item-content {
+        background: none;
+        &.activated {
+            background: $SIDEMENU_TRANSPARENCY;
+        }
+    }
+    &.active-page-highlight {
+        .item-content {
+            background: $SIDEMENU_TRANSPARENCY;
+        }
+    }
+}
+
+.side-menu-gradient {
+    background: -webkit-linear-gradient(left top, $SIDEMENU_TOP, $SIDEMENU_BOTTOM);
+    background: -o-linear-gradient(bottom right, $SIDEMENU_TOP, $SIDEMENU_BOTTOM);
+    background: -moz-linear-gradient(bottom right, $SIDEMENU_TOP, $SIDEMENU_BOTTOM);
+    background: linear-gradient(to bottom right, $SIDEMENU_TOP, $SIDEMENU_BOTTOM);
+}
+
+.profile-image-a {
+    img {
+        border-radius: 60%;
+        margin: 10px;
+        border: 2px solid $SIDEMENU_TRANSPARENCY;
+        -webkit-box-shadow: 0px 0px 142px -37px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 0px 142px -37px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 0px 142px -37px rgba(0, 0, 0, 0.75);
+    }
+}
+
+#map {
+    height: 100%;
+}

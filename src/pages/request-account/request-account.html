@@ -1,0 +1,87 @@
+<!--
+  Generated template for the RequestAccountPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>Request Account</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <div *ngIf="!user">
+        <button class="button-google" (click)="login('google')">
+            <ion-icon name="logo-google"></ion-icon>&nbsp;&nbsp;Log in with AU Google Account
+        </button>
+    </div>
+
+    <div *ngIf="user && auAccount">
+        <ion-card>
+            <ion-card-header text-center>
+                <ion-icon name="person"></ion-icon>&nbsp;&nbsp;User Info
+            </ion-card-header>
+            <ion-card-content>
+                <ion-item>
+                    <ion-label floating>ID</ion-label>
+                    <ion-input type="text" value="{{accountInfo.ID}}" readonly="true"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label floating>Name</ion-label>
+                    <ion-input type="text" value="{{accountInfo.Name}}" readonly="true"></ion-input>
+                </ion-item>
+            </ion-card-content>
+
+            <button ion-button full (click)=logout()>Change Account</button>
+        </ion-card>
+
+        <ion-card>
+            <ion-card-header text-center>
+                Request Position
+            </ion-card-header>
+            <ion-card-content>
+                <ion-item>
+                    <ion-label floating>Role</ion-label>
+                    <ion-select [(ngModel)]="accountInfo.Role">
+                        <ion-option value="staff">Staff</ion-option>
+                        <ion-option value="admin">Admin</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label floating>Faculty</ion-label>
+                    <ion-select [(ngModel)]="accountInfo.FID" (ionChange)="hintMajors(accountInfo.FID)">
+                        <ion-option value="-1">All</ion-option>
+                        <ion-option *ngFor="let f of listFaculties " value="{{f.FID}}">{{f.Name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label floating>Major</ion-label>
+                    <ion-select [(ngModel)]="accountInfo.MID">
+                        <ion-option value="-1">All</ion-option>
+                        <ion-option *ngFor="let m of listMajors" value="{{m.MID}}">{{m.Name}}</ion-option>
+                    </ion-select>
+                </ion-item>
+            </ion-card-content>
+
+            <button ion-button full (click)=submitRequest() color="secondary">Request</button>
+        </ion-card>
+    </div>
+
+    <div *ngIf="user && !auAccount">
+        <ion-card>
+            <ion-card-content>
+                <ion-item>
+                    <ion-label text-wrap text-center>Authority must use AU Google account!</ion-label>
+                </ion-item>
+            </ion-card-content>
+
+            <button ion-button full (click)=logout()>Change Account</button>
+        </ion-card>
+    </div>
+
+</ion-content>

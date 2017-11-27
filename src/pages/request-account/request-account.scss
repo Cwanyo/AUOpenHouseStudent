@@ -1,0 +1,36 @@
+page-request-account {
+    .button-google {
+        background-color: #E8362D;
+        margin-top: 5%;
+        margin-left: 5%;
+        width: 90%;
+        height: 40px;
+        border-radius: 7px;
+        color: whitesmoke;
+        font-size: 15px;
+        font-weight: bold;
+        font-family: Arial, Helvetica, sans-serif;
+        position: center;
+    }
+    .button-google:hover {
+        background-color: #737373;
+        color: white;
+    }
+    .button-logout {
+        background-color: #626262;
+        margin-top: 5%;
+        margin-left: 5%;
+        width: 90%;
+        height: 40px;
+        border-radius: 7px;
+        color: whitesmoke;
+        font-size: 15px;
+        font-weight: bold;
+        font-family: Arial, Helvetica, sans-serif;
+        position: center;
+    }
+    .button-logout:hover {
+        background-color: #ffffff;
+        color: white;
+    }
+}

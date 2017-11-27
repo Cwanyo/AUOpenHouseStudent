@@ -1,0 +1,106 @@
+<!--
+  Generated template for the ViewEventPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <ion-title>View Event</ion-title>
+        <ion-buttons end>
+            <button ion-button (click)="eventEdit()">
+                Edit
+            </button>
+        </ion-buttons>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+    <form [formGroup]="eventForm" novalidate>
+
+        <div style="text-align: center;padding: 10px;">
+            <img *ngIf="Image" [src]="Image" style="display:block;width:100%;height:100%;margin-left:auto;margin-right:auto;" />
+        </div>
+
+        <ion-item>
+            <ion-label floating>Title</ion-label>
+            <ion-input type="text" formControlName="Name"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>Info</ion-label>
+            <ion-textarea formControlName="Info"></ion-textarea>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>Faculty</ion-label>
+            <ion-select formControlName="FID" (ionChange)="hintMajors(eventForm.get('FID').value)">
+                <ion-option value="-1">All</ion-option>
+                <ion-option *ngFor="let f of listFaculties " value="{{f.FID}}">{{f.Name}}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>Major</ion-label>
+            <ion-select formControlName="MID">
+                <ion-option value="-1">All</ion-option>
+                <ion-option *ngFor="let m of listMajors" value="{{m.MID}}">{{m.Name}}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>State</ion-label>
+            <ion-select formControlName="State">
+                <ion-option value="1">Enable</ion-option>
+                <ion-option value="0">Disable</ion-option>
+            </ion-select>
+        </ion-item>
+
+        <div style="text-align: center;padding: 10px;height:250px;width:100%">
+            <div #map id="map"></div>
+        </div>
+
+        <div formArrayName="Event_Time">
+
+            <div *ngFor="let eventTime of eventForm.controls.Event_Time.controls; let i=index">
+
+                <ion-card>
+                    <ion-card-header text-center>Event Time {{i + 1}}</ion-card-header>
+
+                    <ion-card-content [formGroupName]="i">
+                        <ion-item>
+                            <ion-label>Start</ion-label>
+                            <ion-datetime formControlName="Time_Start" displayFormat="YYYY-MM-DD HH:mm" min={{minSelectabledate}} max={{maxSelectabledate}}></ion-datetime>
+                        </ion-item>
+                        <ion-item *ngIf="eventForm.get('Event_Time').value[i].Time_Start">
+                            <ion-label>End</ion-label>
+                            <ion-datetime formControlName="Time_End" displayFormat="YYYY-MM-DD HH:mm" min="{{eventForm.get('Event_Time').value[i].Time_Start}}" max={{maxSelectabledate}}></ion-datetime>
+                        </ion-item>
+
+                        <div *ngIf="listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID]">
+                            <button *ngIf="listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID].length > 0" ion-button full color="secondary" (click)="viewAttendees(eventForm.get('Event_Time').value[i].TID)">
+                                <ion-icon name="people"></ion-icon>&nbsp;&nbsp;Attendees : {{listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID].length}}
+                            </button>
+                            <button *ngIf="listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID].length <= 0" ion-button full color="danger">
+                                <ion-icon name="people"></ion-icon>&nbsp;&nbsp;Attendees : {{listEventTimeAttendess[eventForm.get('Event_Time').value[i].TID].length}}
+                            </button>
+                        </div>
+
+                    </ion-card-content>
+                </ion-card>
+
+            </div>
+
+        </div>
+
+    </form>
+
+    <!--
+    <div>
+        <div>eventForm details:-</div>
+        <pre>Is eventForm valid?: <br>{{eventForm.valid | json}}</pre>
+        <pre>form value: <br>{{eventForm.value | json}}</pre>
+    </div>
+    -->
+
+</ion-content>
