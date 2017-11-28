@@ -10,16 +10,16 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>Game Management</ion-title>
+        <ion-title>Games</ion-title>
     </ion-navbar>
 
     <ion-toolbar>
         <ion-segment [(ngModel)]="gameState" (ionChange)="getListOfGames()">
             <ion-segment-button value="1">
-                Enabled
+                Upcoming
             </ion-segment-button>
             <ion-segment-button value="0">
-                Disabled
+                Played
             </ion-segment-button>
         </ion-segment>
     </ion-toolbar>
@@ -53,46 +53,36 @@
                         <h2>{{game.Name}}</h2>
                         <p>{{game.Info}}</p>
                     </ion-item>
-                    <ion-item-options side="right">
-                        <button ion-button (click)="gameEdit(game.GID)">
-                            <ion-icon name="create"></ion-icon>Edit
-                        </button>
-                        <button ion-button color="danger" (click)="gameDelete(game.GID)">
-                            <ion-icon name="remove-circle"></ion-icon>Disable
-                        </button>
-                    </ion-item-options>
                 </ion-item-sliding>
 
             </ion-item-group>
+
+            <ion-card *ngIf="faculties.length==0">
+
+                <ion-card-header text-center>Empty</ion-card-header>
+
+            </ion-card>
 
         </ion-list>
 
         <ion-list *ngSwitchCase="0">
 
-            <ion-item-group *ngFor="let faculty of faculties">
-                <ion-item-divider text-wrap color="light" style="font-weight: bold">{{faculty}}
-                    <ion-thumbnail item-right>
-                        <img *ngIf="games[faculty][0].Icon" src={{games[faculty][0].Icon}} />
+            <ion-item-sliding *ngFor="let game of listOfMyGames">
+                <ion-item (click)="gameDetails(game.GID)">
+                    <ion-thumbnail item-left>
+                        <img *ngIf="!game.Image" src="assets/img/game.png" />
+                        <img *ngIf="game.Image" src={{game.Image}} style="border-radius: 50%;" />
                     </ion-thumbnail>
-                </ion-item-divider>
+                    <h2>{{game.Name}}</h2>
+                    <p>{{game.Info}}</p>
+                </ion-item>
+            </ion-item-sliding>
 
-                <ion-item-sliding *ngFor="let game of games[faculty]">
-                    <ion-item (click)="gameDetails(game.GID)">
-                        <ion-thumbnail item-left>
-                            <img *ngIf="!game.Image" src="assets/img/game.png" />
-                            <img *ngIf="game.Image" src={{game.Image}} style="border-radius: 50%;" />
-                        </ion-thumbnail>
-                        <h2>{{game.Name}}</h2>
-                        <p>{{game.Info}}</p>
-                    </ion-item>
-                    <ion-item-options side="right">
-                        <button ion-button (click)="gameEdit(game.GID)">
-                            <ion-icon name="create"></ion-icon>Edit
-                        </button>
-                    </ion-item-options>
-                </ion-item-sliding>
+            <ion-card *ngIf="!listOfMyGames">
 
-            </ion-item-group>
+                <ion-card-header text-center>Empty</ion-card-header>
+
+            </ion-card>
 
         </ion-list>
 
