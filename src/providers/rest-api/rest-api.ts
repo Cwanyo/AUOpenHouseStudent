@@ -177,6 +177,19 @@ export class RestApiProvider {
     });
   }
 
+  getMyPoints(){
+    let path = this.url+'/mygames/points';
+    
+    return new Promise((resolve, reject) => {
+      this.http.get(path, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
   getUpGames(){
     let path = this.url+'/upgames';
     
