@@ -141,7 +141,6 @@ export class EventManagementPage {
       event = this.listOfMyEvents.find(i => i.TID === tid);
       this.navCtrl.push(ViewEventPage, {event: event, "parentPage": this});
     }
-    
   }
 
   getDate(date: string){

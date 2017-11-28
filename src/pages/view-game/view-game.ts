@@ -25,6 +25,9 @@ export class ViewGamePage {
   private eventMapMarker: google.maps.Marker;
 
   public game: Game;
+
+  public checkPlay: boolean = false;
+
   public deleteGameQuestion = [];
 
   private loader: Loading;
@@ -54,6 +57,7 @@ export class ViewGamePage {
     console.log("Game",this.game);
 
     this.showMap();
+    this.checkGamePlay();
     this.getListOfFaculties();
 
     let d = new Date();
@@ -62,6 +66,11 @@ export class ViewGamePage {
 
     this.initGame();
     this.gameForm.disable();
+  }
+
+  ngOnDestroy(){
+    console.log("ngOnDestory view-game");
+    this.navParams.get("parentPage").getListOfGames();
   }
 
   showMap(){
@@ -87,6 +96,22 @@ export class ViewGamePage {
     }
   }
 
+  checkGamePlay(){
+    this.restApiProvider.checkMyGamePlay(Number(this.game.GID))
+    .then(result => {
+      if((result as any).length == 0){
+        //not play
+        this.checkPlay = false;
+      }else{
+        //already play
+        this.checkPlay = true;
+      }
+    })
+    .catch(error =>{
+      console.log("ERROR API : getEventTimeAttendess",error);
+    });
+  }
+
   initGame(){
     //Change NULL to empty 
     if(this.game.Image == null){
@@ -110,17 +135,17 @@ export class ViewGamePage {
     //--
     this.gameForm = this.formBuilder.group({
       GID: this.game.GID.toString(),
-      Name: [this.game.Name.toString(), [Validators.required]],
-      Info: [this.game.Info.toString(), [Validators.required]],
+      Name: this.game.Name.toString(),
+      Info: this.game.Info.toString(),
       Image: this.game.Image.toString(),
-      Time_Start: [this.convertTime(this.game.Time_Start), [Validators.required]],
-      Time_End: [this.convertTime(this.game.Time_End), [Validators.required]],
-      State: [this.game.State.toString(), [Validators.required]],
+      Time_Start: this.convertTime(this.game.Time_Start),
+      Time_End: this.convertTime(this.game.Time_End),
+      State: this.game.State.toString(),
       Location_Latitude: this.game.Location_Latitude.toString(),
       Location_Longitude: this.game.Location_Longitude.toString(),
       Game_Question: this.formBuilder.array([]),
-      MID: [this.game.MID.toString(), [Validators.required]],
-      FID: [this.game.FID.toString(), [Validators.required]]
+      MID: [this.game.MID.toString()],
+      FID: [this.game.FID.toString()]
     });
     //set major 
     this.hintMajors(Number(this.game.FID));
@@ -142,16 +167,18 @@ export class ViewGamePage {
       json.forEach(q => {
         let gq = this.formBuilder.group({
           QID: q.QID.toString(),
-          Question: [q.Question.toString(), [Validators.required]],
+          Question: [{value: q.Question.toString(), disabled:true}],
           Answer_Choice: this.formBuilder.array([]),
-          Right_Choice: [q.Right_Choice.toString(), [Validators.required]]
+          Right_Choice: ["", [Validators.required]]
         });
         
         this.initAnswerChoice(q.QID, gq);
         
         gameControl.push(gq);
       });
-      gameControl.disable();
+      if(this.checkPlay){
+        gameControl.disable();
+      }
     })
     .catch(error =>{
       console.log("ERROR API : getGameQuestion",error);
@@ -166,10 +193,10 @@ export class ViewGamePage {
       json.forEach(c => {
         choiceControl.push(this.formBuilder.group({
           CID: c.CID.toString(),
-          Choice: [c.Choice.toString(), [Validators.required]],
+          Choice: c.Choice.toString(),
         }));
       });
-      choiceControl.disable();
+      //choiceControl.disable();
     })
     .catch(error =>{
       console.log("ERROR API : getAnswerChoice",error);
@@ -215,6 +242,63 @@ export class ViewGamePage {
     .catch(error =>{
       console.log("ERROR API : getMajorsInFaculty",error);
     })
+  }
+  
+  submitGameAnswer(){
+    let confirm = this.alertCtrl.create({
+      title: "Alert!",
+      message: "Are you sure that you want to submit this answer?",
+      enableBackdropDismiss: false,
+      buttons: [{
+        text: "Disagree"
+      },{
+        text: "Agree",
+        handler: () => {
+          this.sendGameAnswer();
+        }
+      }]
+    });
+    confirm.present();
+  }
+
+  sendGameAnswer(){
+    this.presentLoading();
+    let game: Game = this.gameForm.value;
+    console.log("sendGameAnswer", game);
+
+    let answer = {
+      GID: this.game.GID,
+      GameQuestion: []
+    };
+
+    game.Game_Question.forEach(q => {
+      let qid = q.QID;
+      let ans = q.Right_Choice;
+      answer.GameQuestion.push({QID: qid, Answer: ans});
+    });
+    
+    this.restApiProvider.submitGameAnswer(answer)
+    .then(result => {
+      console.log("submit answer time success");
+      this.loader.dismiss();
+      this.checkPlay = true;
+      var jsonData: any = result;
+      if(jsonData.isSuccess){
+        this.presentAlert(jsonData.message);
+      }
+    })
+    .catch(error =>{
+      this.loader.dismiss();
+      console.log("ERROR API : submitGameAnswer",error);
+      if(error.status == 0){
+        //show error message
+        this.presentAlert("Cannot connect to server");
+      }else{
+        var jsonData = JSON.parse(error.error);
+        //show error message
+        this.presentAlert(jsonData.message);
+      }
+    });
   }
 
   presentAlert(message) {

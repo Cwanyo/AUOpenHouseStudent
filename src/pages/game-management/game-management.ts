@@ -29,6 +29,9 @@ export class GameManagementPage {
   public faculties = [];
 
   public rawListOfGames;
+  public listOfMyGames;
+
+  public emptylistOfMyGames = false;
 
   constructor(
     public navCtrl: NavController,
@@ -44,22 +47,47 @@ export class GameManagementPage {
   }
 
   doRefresh(refresher) {
-    this.restApiProvider.getGames(Number(this.gameState))
-    .then(result => {
-      this.rawListOfGames = result;
-      this.faculties = Object.keys(this.groupByFaculty(result));
-      this.games = this.groupByFaculty(result);
-      refresher.complete();
-    })
-    .catch(error =>{
-      console.log("ERROR API : getGames",error);
-      refresher.complete();
-    })
+    // add refresher.complete();
+    if(this.gameState == "1"){
+      this.restApiProvider.getUpGames()
+      .then(result => {
+        this.rawListOfGames = result;
+        this.faculties = Object.keys(this.groupByFaculty(result));
+        this.games = this.groupByFaculty(result);
+        refresher.complete();
+      })
+      .catch(error =>{
+        console.log("ERROR API : getUpGames",error);
+        refresher.complete();
+      });
+    }else if(this.gameState == "0"){
+      this.restApiProvider.getMyGames()
+      .then(result => {
+        if((result as any).length != 0){
+          this.listOfMyGames = result;
+        }else{
+          this.listOfMyGames = null;
+        }
+        refresher.complete();
+      })
+      .catch(error =>{
+        console.log("ERROR API : getMyGames",error);
+        refresher.complete();
+      });
+    }
   }
 
   getListOfGames(){
+    if(this.gameState == "1"){
+      this.getUpComingGames();
+    }else if(this.gameState == "0"){
+      this.getMyGames();
+    }
+  }
+
+  getUpComingGames(){
     this.presentLoading();
-    this.restApiProvider.getGames(Number(this.gameState))
+    this.restApiProvider.getUpGames()
     .then(result => {
       this.loader.dismiss();
       this.rawListOfGames = result;
@@ -68,8 +96,25 @@ export class GameManagementPage {
     })
     .catch(error =>{
       this.loader.dismiss();
-      console.log("ERROR API : getGames",error);
+      console.log("ERROR API : getUpGames",error);
+    });
+  }
+
+  getMyGames(){
+    this.presentLoading();
+    this.restApiProvider.getMyGames()
+    .then(result => {
+      this.loader.dismiss();
+      if((result as any).length != 0){
+        this.listOfMyGames = result;
+      }else{
+        this.listOfMyGames = null;
+      }
     })
+    .catch(error =>{
+      this.loader.dismiss();
+      console.log("ERROR API : getMyGames",error);
+    });
   }
 
   groupByFaculty(facultyValues){
@@ -88,10 +133,15 @@ export class GameManagementPage {
   }
 
   gameDetails(gid: number){
-    console.log("viewGame",gid);
-    let game: Game = this.rawListOfGames.find(i => i.GID === gid);
-    
-    this.navCtrl.push(ViewGamePage, {game: game, "parentPage": this});
+    console.log("gameDetails",gid);
+    let game: Game;
+    if(this.gameState == "1"){
+      game = this.rawListOfGames.find(i => i.GID === gid);
+      this.navCtrl.push(ViewGamePage, {game: game, "parentPage": this});
+    }else if(this.gameState == "0"){
+      game = this.listOfMyGames.find(i => i.GID === gid);
+      this.navCtrl.push(ViewGamePage, {game: game, "parentPage": this});
+    }
   }
 
   presentAlert(message) {
