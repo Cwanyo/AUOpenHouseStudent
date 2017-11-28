@@ -82,36 +82,22 @@
                             <ion-textarea autosize formControlName="Question"></ion-textarea>
                         </ion-item>
 
-                        <ion-label text-center>Choices</ion-label>
-                        <div formArrayName="Answer_Choice">
+                        <ion-list radio-group formControlName="Right_Choice" formArrayName="Answer_Choice">
+                            <ion-list-header>
+                                Choices
+                            </ion-list-header>
+
                             <div *ngFor="let answerChoice of gameQuestion.controls.Answer_Choice.controls; let j=index">
                                 <div [formGroupName]="j">
 
                                     <ion-item>
-                                        <ion-label>{{j + 1}}</ion-label>
-                                        <ion-textarea autosize formControlName="Choice"></ion-textarea>
+                                        <ion-label text-wrap>{{answerChoice.get('Choice').value}}</ion-label>
+                                        <ion-radio item-left text-wrap value="{{answerChoice.get('CID').value}}"></ion-radio>
                                     </ion-item>
 
                                 </div>
                             </div>
-                        </div>
-
-                        <ion-item *ngIf="gameQuestion.get('QID')">
-                            <ion-label>Right Choice</ion-label>
-                            <ion-select formControlName="Right_Choice" formArrayName="Answer_Choice">
-                                <ion-option *ngFor="let answerChoice of gameQuestion.controls.Answer_Choice.controls; let j=index" [formGroupName]="j" value="{{answerChoice.get('CID').value}}">{{j + 1}}</ion-option>
-                            </ion-select>
-                        </ion-item>
-
-                        <ion-item *ngIf="gameQuestion.get('QID')==null">
-                            <ion-label>Right Choice</ion-label>
-                            <ion-select formControlName="Right_Choice">
-                                <ion-option value="1">1</ion-option>
-                                <ion-option value="2">2</ion-option>
-                                <ion-option value="3">3</ion-option>
-                                <ion-option value="4">4</ion-option>
-                            </ion-select>
-                        </ion-item>
+                        </ion-list>
 
                     </ion-card-content>
                 </ion-card>
@@ -121,6 +107,10 @@
         </div>
 
     </form>
+
+    <button ion-button *ngIf="checkPlay==false" full (click)=submitGameAnswer() [disabled]="!gameForm.valid">
+       Submit
+    </button>
 
     <!--
     <div>

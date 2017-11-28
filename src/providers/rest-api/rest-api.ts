@@ -229,4 +229,30 @@ export class RestApiProvider {
     });
   }
 
+  submitGameAnswer(answer){
+    let path = this.url+'/mygames';
+    
+    return new Promise((resolve, reject) => {
+      this.http.post(path, {answer: answer}, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  checkMyGamePlay(gid: number){
+    let path = this.url+'/mygames/'+gid;
+    
+    return new Promise((resolve, reject) => {
+      this.http.get(path, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
 }
