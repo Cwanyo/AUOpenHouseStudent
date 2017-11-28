@@ -25,6 +25,10 @@
             <ion-list-header text-center style="font-size: 120%;font-weight: bold;">List of Majors</ion-list-header>
             <ion-item *ngFor="let major of listOfMajors; let i= index;" text-wrap text-center>{{i+1}}. {{major.Name}}</ion-item>
         </ion-list>
+
+        <div style="text-align: center;height:250px;width:100%">
+            <div #map id="map"></div>
+        </div>
         <a id="website" href="{{faculty.Website}}" target="_blank" style="display: none;"></a>
         <button ion-button full color="light" onclick="document.getElementById('website').click();">Visit Website</button>
     </ion-card>

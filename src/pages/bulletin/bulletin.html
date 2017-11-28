@@ -32,6 +32,13 @@
                 </ion-thumbnail>
                 <h2 text-wrap text-capitalize>{{faculty.Name}}</h2>
             </ion-item>
+
+            <ion-card *ngIf="!listOfFaculties">
+
+                <ion-card-header text-center>Empty</ion-card-header>
+
+            </ion-card>
+
         </ion-item-group>
 
     </ion-list>

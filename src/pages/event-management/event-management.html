@@ -58,6 +58,12 @@
 
             </ion-item-group>
 
+            <ion-card *ngIf="faculties.length==0">
+
+                <ion-card-header text-center>Empty</ion-card-header>
+
+            </ion-card>
+
         </ion-list>
 
         <ion-list *ngSwitchCase="0">
@@ -73,6 +79,12 @@
                     <p>End - {{getDate(event.Time_End)}}</p>
                 </ion-item>
             </ion-item-sliding>
+
+            <ion-card *ngIf="!listOfMyEvents">
+
+                <ion-card-header text-center>Empty</ion-card-header>
+
+            </ion-card>
 
         </ion-list>
 

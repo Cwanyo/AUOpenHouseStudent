@@ -31,6 +31,8 @@ export class EventManagementPage {
   public rawListOfEvents;
   public listOfMyEvents;
 
+  public emptylistOfMyEvents = false;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -60,7 +62,11 @@ export class EventManagementPage {
     }else if(this.eventState == "0"){
       this.restApiProvider.getMyEvents()
       .then(result => {
-        this.listOfMyEvents = result;
+        if((result as any).length != 0){
+          this.listOfMyEvents = result;
+        }else{
+          this.listOfMyEvents = null;
+        }
         refresher.complete();
       })
       .catch(error =>{
@@ -98,7 +104,11 @@ export class EventManagementPage {
     this.restApiProvider.getMyEvents()
     .then(result => {
       this.loader.dismiss();
-      this.listOfMyEvents = result;
+      if((result as any).length != 0){
+        this.listOfMyEvents = result;
+      }else{
+        this.listOfMyEvents = null;
+      }
     })
     .catch(error =>{
       this.loader.dismiss();
