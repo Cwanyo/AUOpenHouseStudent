@@ -81,7 +81,7 @@ export class ChatPage {
   }
 
   subAutoScoll(){
-    this.subAuSc = Observable.interval(350).subscribe(() => {
+    this.subAuSc = Observable.interval(400).subscribe(() => {
       this.content.scrollToBottom();
     });
   }
@@ -108,6 +108,14 @@ export class ChatPage {
 
     });
     this.message = "";
+  }
+
+  isValid(): boolean{
+    if(this.message==""){
+      return false;
+    }else{
+      return true;
+    }
   }
 
 }

@@ -29,7 +29,7 @@
     <ion-toolbar>
         <div id="footer">
             <ion-input type="text" placeholder="Add Comment..." [(ngModel)]="message"></ion-input>
-            <button ion-button clear item-end (click)="sendMessage()">Send</button>
+            <button ion-button clear item-end (click)="sendMessage()" [disabled]="!isValid()">Send</button>
         </div>
     </ion-toolbar>
 
