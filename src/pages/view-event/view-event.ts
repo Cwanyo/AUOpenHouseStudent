@@ -5,6 +5,8 @@ import { Loading } from 'ionic-angular/components/loading/loading';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Event } from './../../interface/event';
 
+import { ChatPage } from './../chat/chat';
+
 import { RestApiProvider } from './../../providers/rest-api/rest-api';
 import {} from '@types/googlemaps';
 /**
@@ -94,6 +96,11 @@ export class ViewEventPage {
         map: map
       });
     }
+  }
+
+  viewChat(){
+    console.log("viewChat");
+    this.navCtrl.push(ChatPage, {eid: this.event.EID});
   }
 
   checkEventAttend(){

@@ -26,6 +26,8 @@ import { ViewFacultyPage } from './../pages/view-faculty/view-faculty';
 import { EventManagementPage } from './../pages/event-management/event-management';
 import { ViewEventPage } from './../pages/view-event/view-event';
 
+import { ChatPage } from './../pages/chat/chat';
+
 //Game Pages
 import { GameManagementPage } from './../pages/game-management/game-management';
 import { ViewGamePage } from './../pages/view-game/view-game';
@@ -51,6 +53,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ViewEventPage,
     GameManagementPage,
     ViewGamePage,
+    ChatPage,
     Autosize
   ],
   imports: [
@@ -74,6 +77,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ViewEventPage,
     GameManagementPage,
     ViewGamePage,
+    ChatPage
   ],
   providers: [
     StatusBar,
