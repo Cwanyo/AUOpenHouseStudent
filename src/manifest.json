@@ -1,6 +1,6 @@
 {
-    "name": "AuOpenHouseStudent",
-    "short_name": "AuOpenHouseStudent",
+    "name": "AUOpenHouseStudent",
+    "short_name": "AUOpenHouseStudent",
     "start_url": "index.html",
     "display": "standalone",
     "icons": [{

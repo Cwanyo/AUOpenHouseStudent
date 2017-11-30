@@ -1,8 +1,9 @@
 {
-    "name": "AuOpenHouseStudent",
-    "version": "5.0.0",
+    "name": "AUOpenHouseStudent",
+    "version": "6.0.0",
     "author": "Cwan",
-    "homepage": "https://github.com/Cwanyo/auopenhouseadmin",
+    "homepage": "https://github.com/Cwanyo/AUOpenHouseStudent",
+    "description": "AU Open House app for admin and staff",
     "private": true,
     "scripts": {
         "clean": "ionic-app-scripts clean",
@@ -38,6 +39,5 @@
     "devDependencies": {
         "@ionic/app-scripts": "3.0.1",
         "typescript": "2.3.4"
-    },
-    "description": "Au Open House app for admin and staff"
+    }
 }

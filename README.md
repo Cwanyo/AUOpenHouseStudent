@@ -1,1 +1,1 @@
-# Au Open House (Student)
+# AU Open House (Student)
