@@ -139,12 +139,30 @@ export class LoginPage {
       .then(() => {
         this.afAuth.auth.getRedirectResult()
         .then(result => console.log("Logged-in with "+provider,result))
-        .catch(error => console.log("Error Sing-in with "+provider,error));
+        .catch(error => {
+          console.log("Error Sing-in with "+provider,error);
+          let errorCode = error.code;
+          let errorMessage = error.message;
+          var email = error.email;
+          var credential = error.credential;
+          if(errorCode == "auth/account-exists-with-different-credential"){
+            this.presentAlert("Account already exist for provided e-mail("+email+").");
+          }
+        });
       });
     }else{
       this.afAuth.auth.signInWithPopup(signInProvider)
       .then(result => console.log("Logged-in with "+provider,result))
-      .catch(error => console.log("Error Sing-in with "+provider,error));
+      .catch(error => {
+        console.log("Error Sing-in with "+provider,error);
+        let errorCode = error.code;
+        let errorMessage = error.message;
+        var email = error.email;
+        var credential = error.credential;
+        if(errorCode == "auth/account-exists-with-different-credential"){
+          this.presentAlert("Account already exist for provided e-mail("+email+").");
+        }
+      });
     }
 
   }
