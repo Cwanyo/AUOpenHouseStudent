@@ -5,7 +5,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
 import { RestApiProvider } from './../../providers/rest-api/rest-api';
-
+import { Subscription } from 'rxjs/Subscription';
 /**
  * Generated class for the HomePage page.
  *
@@ -19,6 +19,8 @@ import { RestApiProvider } from './../../providers/rest-api/rest-api';
 })
 export class HomePage {
   
+  private subAuth: Subscription;
+
   private user: firebase.User;
   private point;
 
@@ -32,7 +34,7 @@ export class HomePage {
   }
 
   userAuth(){
-    this.afAuth.authState.subscribe(user => {
+    this.subAuth = this.afAuth.authState.subscribe(user => {
       if (!user) {
         this.user = null;
         return;
@@ -40,6 +42,11 @@ export class HomePage {
       this.user = user;
       this.getMyPoints();
     });
+  }
+
+  ngOnDestroy(){
+    console.log("ngOnDestroy login")
+    this.subAuth.unsubscribe();
   }
 
   getMyPoints(){
