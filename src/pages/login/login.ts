@@ -141,13 +141,7 @@ export class LoginPage {
         .then(result => console.log("Logged-in with "+provider,result))
         .catch(error => {
           console.log("Error Sing-in with "+provider,error);
-          let errorCode = error.code;
-          let errorMessage = error.message;
-          var email = error.email;
-          var credential = error.credential;
-          if(errorCode == "auth/account-exists-with-different-credential"){
-            this.presentAlert("Account already exist for provided e-mail("+email+").");
-          }
+          this.errorLogin(error);
         });
       });
     }else{
@@ -155,16 +149,80 @@ export class LoginPage {
       .then(result => console.log("Logged-in with "+provider,result))
       .catch(error => {
         console.log("Error Sing-in with "+provider,error);
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        var email = error.email;
-        var credential = error.credential;
-        if(errorCode == "auth/account-exists-with-different-credential"){
-          this.presentAlert("Account already exist for provided e-mail("+email+").");
-        }
+        this.errorLogin(error);
       });
     }
 
+  }
+
+  errorLogin(error){
+    let errorCode = error.code;
+    let errorMessage = error.message;
+    var email = error.email;
+    var pendingCred = error.credential;
+    if(errorCode == "auth/account-exists-with-different-credential"){
+      let alert = this.alertCtrl.create({
+        title: 'Alert!',
+        subTitle: "Account already exist for provided e-mail("+email+").",
+        enableBackdropDismiss: false,
+        buttons: [{
+          text: 'Link Account',
+          handler: () => {
+            this.linkAccount(email, pendingCred);
+          }
+          },{
+          text: 'Logout',
+          handler: () => {
+            this.logout();
+          }
+        }]
+      });
+      alert.present();
+    }
+  }
+
+  linkAccount(email, pendingCred){
+    this.afAuth.auth.fetchProvidersForEmail(email)
+    .then(providers => {
+
+      let provider = null;
+      
+      switch (providers[0]) {
+        case "facebook":
+          provider = new firebase.auth.FacebookAuthProvider();
+          break;
+        case "google":
+          provider = new firebase.auth.GoogleAuthProvider();
+          break;
+      }
+
+      if (this.platform.is('cordova')){
+        this.afAuth.auth.signInWithRedirect(provider)
+        .then(() => {
+          this.afAuth.auth.getRedirectResult()
+          .then(result => {
+            result.user.link(pendingCred)
+            .then(()=>{
+              console.log("Account linked",result);
+            });
+          })
+          .catch(error => {
+            console.log("Error account link",error);
+          });
+        });
+      }else{
+        this.afAuth.auth.signInWithPopup(provider)
+        .then(result => {
+          result.user.link(pendingCred)
+          .then(()=>{
+            console.log("Account linked",result);
+          });
+        })
+        .catch(error => {
+          console.log("Error account link",error);
+        });
+      }
+    });
   }
 
   logout() {
