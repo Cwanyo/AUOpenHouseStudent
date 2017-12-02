@@ -28,6 +28,9 @@ export class LoginPage {
 
   private user: firebase.User;
 
+  private checkLinkAccount: boolean = false;
+  private pendingCred;
+
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -58,6 +61,9 @@ export class LoginPage {
         return;
       }
       this.user = user;
+      if(this.checkLinkAccount){
+        return;
+      }
       this.checkBackend();
     });
   }
@@ -157,18 +163,19 @@ export class LoginPage {
 
   errorLogin(error){
     let errorCode = error.code;
-    let errorMessage = error.message;
     var email = error.email;
-    var pendingCred = error.credential;
+
     if(errorCode == "auth/account-exists-with-different-credential"){
       let alert = this.alertCtrl.create({
         title: 'Alert!',
-        subTitle: "Account already exist for provided e-mail("+email+").",
+        message: "Account already exist for provided e-mail. Login with this email address("+email+")\nOR\nLink this account to the existing account.",
         enableBackdropDismiss: false,
         buttons: [{
           text: 'Link Account',
           handler: () => {
-            this.linkAccount(email, pendingCred);
+            this.checkLinkAccount = true;
+            this.pendingCred = error.credential;
+            this.linkAccount(email);
           }
           },{
           text: 'Logout',
@@ -181,48 +188,77 @@ export class LoginPage {
     }
   }
 
-  linkAccount(email, pendingCred){
+  linkAccount(email){
     this.afAuth.auth.fetchProvidersForEmail(email)
     .then(providers => {
 
       let provider = null;
       
+      console.log(providers);
+
       switch (providers[0]) {
-        case "facebook":
+        case "facebook.com":
           provider = new firebase.auth.FacebookAuthProvider();
           break;
-        case "google":
+        case "google.com":
           provider = new firebase.auth.GoogleAuthProvider();
           break;
       }
 
-      if (this.platform.is('cordova')){
-        this.afAuth.auth.signInWithRedirect(provider)
-        .then(() => {
-          this.afAuth.auth.getRedirectResult()
-          .then(result => {
-            result.user.link(pendingCred)
-            .then(()=>{
-              console.log("Account linked",result);
-            });
-          })
-          .catch(error => {
-            console.log("Error account link",error);
-          });
-        });
-      }else{
-        this.afAuth.auth.signInWithPopup(provider)
+      let alert = this.alertCtrl.create({
+        title: 'Alert!',
+        message: "Are you sure that you want to link this account with ("+providers[0]+")?",
+        enableBackdropDismiss: false,
+        buttons: [{
+          text: 'No',
+          handler: () => {
+            this.pendingCred = null;
+          }
+          },{
+          text: 'Yes',
+          handler: () => {
+            this.confirmLinkAccount(provider);
+          }
+        }]
+      });
+      alert.present();
+      
+    });
+  }
+
+  confirmLinkAccount(provider){
+    if (this.platform.is('cordova')){
+      this.afAuth.auth.signInWithRedirect(provider)
+      .then(() => {
+        this.afAuth.auth.getRedirectResult()
         .then(result => {
-          result.user.link(pendingCred)
+          result.user.linkWithCredential(this.pendingCred)
           .then(()=>{
             console.log("Account linked",result);
+            this.presentAlert("Account linked");
+            this.checkLinkAccount = false;
           });
         })
         .catch(error => {
           console.log("Error account link",error);
+          this.presentAlert("Fail to link Account");
         });
-      }
-    });
+      });
+    }else{
+      this.afAuth.auth.signInWithPopup(provider)
+      .then(result => {
+        result.user.linkWithCredential(this.pendingCred)
+        .then(()=>{
+          console.log("Account linked",result);
+          this.presentAlert("Account linked");
+          this.checkLinkAccount = false;
+        });
+      })
+      .catch(error => {
+        console.log("Error account link",error);
+        this.presentAlert("Fail to link Account");
+      });
+    }
   }
 
   logout() {
@@ -231,6 +267,8 @@ export class LoginPage {
       console.log("Sign-out",result);
       //clear session
       sessionStorage.clear();
+      //set checkLink
+      this.checkLinkAccount = false;
     })
     .catch(error => console.log("Error Sing-out",error));
   }

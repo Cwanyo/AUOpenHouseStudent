@@ -178,7 +178,7 @@ export class RestApiProvider {
   }
 
   getMyPoints(){
-    let path = this.url+'/mygames/points';
+    let path = this.url+'/mygamepoints';
     
     return new Promise((resolve, reject) => {
       this.http.get(path, {withCredentials: true})
