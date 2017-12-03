@@ -1,6 +1,8 @@
 {
-    "name": "AUOpenHouseStudent",
-    "app_id": "",
-    "type": "ionic-angular",
-    "integrations": {}
+  "name": "AUOpenHouseStudent",
+  "app_id": "",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
 }
