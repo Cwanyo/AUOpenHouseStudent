@@ -6,7 +6,7 @@ Link to our [website](https://auopenhousestudent.firebaseapp.com)
 
 # Description
 
-The application that allows students to access and view informations.
+The application that allow students to access and view informations.
 
 # Features
 
