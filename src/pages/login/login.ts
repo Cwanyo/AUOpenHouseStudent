@@ -87,16 +87,16 @@ export class LoginPage {
       }).catch(error => {
         this.loader.dismiss();
         console.log("ERROR API : login",error);
-        var jsonData = JSON.parse(error.error);
 
         if(error.status == 0){
           //show error message
           this.presentAlert("Cannot connect to server");
         }else if(error.status == 401){
+          var json = JSON.parse(error.error);
           // show register
           let alert = this.alertCtrl.create({
             title: 'Alert!',
-            subTitle: jsonData.message,
+            subTitle: json.message,
             enableBackdropDismiss: false,
             buttons: [{
               text: 'Register',
@@ -112,6 +112,7 @@ export class LoginPage {
           });
           alert.present();
         }else{
+          var jsonData = JSON.parse(error.error);
           //show error message
           this.presentAlert(jsonData.message);
         }
