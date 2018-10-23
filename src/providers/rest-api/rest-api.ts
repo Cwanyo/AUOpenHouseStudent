@@ -14,8 +14,9 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class RestApiProvider {
 
-  public url = 'https://auopenhouse.herokuapp.com/api/student';
-  //public url = 'http://localhost:3000/api/student';
+  public url = 'https://auopenhouse-loadbalancer.herokuapp.com/api/student';
+  // public url = 'https://auopenhouse.herokuapp.com/api/student';
+  // public url = 'http://localhost:8080/api/student';
 
   constructor(public http: HttpClient) {
     console.log('Hello RestApiProvider Provider');
@@ -25,7 +26,7 @@ export class RestApiProvider {
     let path = this.url+'/login';
 
     return new Promise((resolve, reject) => {
-      this.http.put(path, {idToken: idToken}, {withCredentials: true})
+      this.http.post(path, {idToken: idToken}, {withCredentials: true})
       .subscribe(res => {
         resolve(res);
       }, (err) => {
@@ -38,7 +39,20 @@ export class RestApiProvider {
     let path = this.url+'/logout';
 
     return new Promise((resolve, reject) => {
-      this.http.get(path, {withCredentials: true})
+      this.http.delete(path, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  register(idToken: string){
+    let path = this.url+'/register';
+
+    return new Promise((resolve, reject) => {
+      this.http.put(path, {idToken: idToken}, {withCredentials: true})
       .subscribe(res => {
         resolve(res);
       }, (err) => {
