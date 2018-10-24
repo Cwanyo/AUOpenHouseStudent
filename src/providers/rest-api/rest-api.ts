@@ -7,7 +7,6 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 /*
   Generated class for the RestApiProvider provider.
-
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
@@ -40,6 +39,19 @@ export class RestApiProvider {
 
     return new Promise((resolve, reject) => {
       this.http.delete(path, {withCredentials: true})
+      .subscribe(res => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  register(idToken: string){
+    let path = this.url+'/register';
+
+    return new Promise((resolve, reject) => {
+      this.http.put(path, {idToken: idToken}, {withCredentials: true})
       .subscribe(res => {
         resolve(res);
       }, (err) => {
