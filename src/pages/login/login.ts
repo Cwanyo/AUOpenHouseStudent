@@ -87,30 +87,9 @@ export class LoginPage {
       }).catch(error => {
         this.loader.dismiss();
         console.log("ERROR API : login",error);
-
         if(error.status == 0){
           //show error message
           this.presentAlert("Cannot connect to server");
-        }else if(error.status == 401){
-          var json = JSON.parse(error.error);
-          // show register
-          let alert = this.alertCtrl.create({
-            title: 'Alert!',
-            subTitle: json.message,
-            enableBackdropDismiss: false,
-            buttons: [{
-              text: 'Register',
-              handler: () => {
-                this.registerAccount(idToken);
-              }
-            },{
-              text: 'Logout',
-              handler: () => {
-                this.logout();
-              }
-            }]
-          });
-          alert.present();
         }else{
           var jsonData = JSON.parse(error.error);
           //show error message
@@ -122,44 +101,6 @@ export class LoginPage {
     .catch(err => {
       this.loader.dismiss();
       console.log("ERROR : geting token",err);
-    });
-  }
-
-  registerAccount(idToken){
-    //show loding
-    this.presentLoading();
-
-    this.restApiProvider.register(idToken)
-    .then(data => {
-      var jsonData: any = data;
-      if(jsonData.isSuccess){
-        //remove loding
-        this.loader.dismiss();
-
-        let alert = this.alertCtrl.create({
-          title: 'Alert!',
-          subTitle: jsonData.message,
-          enableBackdropDismiss: false,
-          buttons: [{
-            text: 'OK',
-            handler: () => {
-              this.checkBackend();
-            }
-          }]
-        });
-        alert.present();
-      }
-    }).catch(error => {
-      this.loader.dismiss();
-      console.log("ERROR API : login",error);
-      if(error.status == 0){
-        //show error message
-        this.presentAlert("Cannot connect to server");
-      }else{
-        var jsonData = JSON.parse(error.error);
-        //show error message
-        this.presentAlert(jsonData.message);
-      }
     });
   }
 

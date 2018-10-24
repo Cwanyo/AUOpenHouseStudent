@@ -48,19 +48,6 @@ export class RestApiProvider {
     });
   }
 
-  register(idToken: string){
-    let path = this.url+'/register';
-
-    return new Promise((resolve, reject) => {
-      this.http.put(path, {idToken: idToken}, {withCredentials: true})
-      .subscribe(res => {
-        resolve(res);
-      }, (err) => {
-        reject(err);
-      });
-    });
-  }
-
   getFaculties(){
     let path = this.url+'/faculties';
     
