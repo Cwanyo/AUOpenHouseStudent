@@ -93,29 +93,38 @@ export class LoginPage {
           //show error message
           this.presentAlert("Cannot connect to server");
         }else if(error.status == 401){
-          var json = JSON.parse(error.error);
-          // show register
-          let alert = this.alertCtrl.create({
-            title: 'Alert!',
-            subTitle: json.message,
-            enableBackdropDismiss: false,
-            buttons: [{
-              text: 'Register',
-              handler: () => {
-                this.registerAccount(idToken);
-              }
-            },{
-              text: 'Logout',
-              handler: () => {
-                this.logout();
-              }
-            }]
-          });
-          alert.present();
-        }else{
-          var jsonData = JSON.parse(error.error);
           //show error message
-          this.presentAlert(jsonData.message);
+          try {
+            var json = JSON.parse(error.error);
+            // show register
+            let alert = this.alertCtrl.create({
+              title: 'Alert!',
+              subTitle: json.message,
+              enableBackdropDismiss: false,
+              buttons: [{
+                text: 'Register',
+                handler: () => {
+                  this.registerAccount(idToken);
+                }
+              },{
+                text: 'Logout',
+                handler: () => {
+                  this.logout();
+                }
+              }]
+            });
+            alert.present();
+          } catch (e) {
+            this.presentAlert(error.statusText);
+          }
+        }else{
+          //show error message
+          try {
+            var jsonData = JSON.parse(error.error);
+            this.presentAlert(jsonData.message);
+          } catch (e) {
+            this.presentAlert(error.statusText);
+          }
         }
       });
     
@@ -157,9 +166,13 @@ export class LoginPage {
         //show error message
         this.presentAlert("Cannot connect to server");
       }else{
-        var jsonData = JSON.parse(error.error);
         //show error message
-        this.presentAlert(jsonData.message);
+        try {
+          var jsonData = JSON.parse(error.error);
+          this.presentAlert(jsonData.message);
+        } catch (e) {
+          this.presentAlert(error.statusText);
+        }
       }
     });
   }
