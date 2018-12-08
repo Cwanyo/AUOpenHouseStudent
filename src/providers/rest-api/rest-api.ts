@@ -13,8 +13,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class RestApiProvider {
 
-  public url = 'https://auopenhouse-loadbalancer.herokuapp.com/api/student';
-  // public url = 'https://auopenhouse.herokuapp.com/api/student';
+  // public url = 'https://auopenhouse-loadbalancer.herokuapp.com/api/student';
+  public url = 'https://auopenhouse.herokuapp.com/api/student';
   // public url = 'http://localhost:8080/api/student';
 
   constructor(public http: HttpClient) {
